@@ -137,5 +137,23 @@ calculate();
 
 </script>
 
+  from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import Flow
+
+# ... (Code to handle OAuth 2.0 flow and get credentials)
+
+service = build('drive', 'v3', credentials=credentials)
+
+# Create a folder (optional)
+file_metadata = {'name': 'My Website Data', 'mimeType': 'application/vnd.google-apps.folder'}
+folder = service.files().create(body=file_metadata, fields='id').execute()
+
+# Upload a file
+file_metadata = {'name': 'data.txt', 'parents': [folder.get('id')]} # Add to folder
+media = MediaFileUpload('path/to/data.txt', mimetype='text/plain')
+file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+
+print(F'File ID: {file.get("id")}')
+  
 </body>
 </html>
