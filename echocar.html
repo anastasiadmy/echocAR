@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Echocardiography Ultrasound Form</title>
+<style>
+body {
+  font-family: sans-serif;
+}
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+input[type="text"], input[type="number"] {
+  width: 200px;
+  padding: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+}
+#results {
+  margin-top: 20px;
+  font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+<h1>Echocardiography Ultrasound Form</h1>
+
+<label for="height">Height (cm):</label>
+<input type="number" id="height" name="height" oninput="calculate()">
+
+<label for="weight">Weight (kg):</label>
+<input type="number" id="weight" name="weight" oninput="calculate()">
+
+<label for="lvedd">LVEDD (mm):</label>
+<input type="number" id="lvedd" name="lvedd" oninput="calculate()">
+
+<label for="lvesd">LVESD (mm):</label>
+<input type="number" id="lvesd" name="lvesd" oninput="calculate()">
+
+<label for="ivsd">IVSD (mm):</label>
+<input type="number" id="ivsd" name="ivsd" oninput="calculate()">
+
+<label for="pwtd">PWTD (mm):</label>
+<input type="number" id="pwtd" name="pwtd" oninput="calculate()">
+
+<label for="la_volume">LA Volume (ml):</label>
+<input type="number" id="la_volume" name="la_volume" oninput="calculate()">
+
+
+<div id="results">
+  <p>BSA: <span id="bsa"></span> m²</p>
+  <p>LV Mass: <span id="lv_mass"></span> g</p>
+  <p>LVMI: <span id="lvmi"></span> g/m²</p>
+  <p>RWT: <span id="rwt"></span></p>
+  <p>LAVI: <span id="lavi"></span> ml/m²</p>
+  <p>EDV: <span id="edv"></span> ml</p>
+  <p>ESV: <span id="esv"></span> ml</p>
+  <p>SV: <span id="sv"></span> ml</p>
+  <p>EF: <span id="ef"></span> %</p>
+</div>
+
+<script>
+function calculate() {
+  const height = parseFloat(document.getElementById("height").value);
+  const weight = parseFloat(document.getElementById("weight").value);
+  const lvedd = parseFloat(document.getElementById("lvedd").value);
+  const lvesd = parseFloat(document.getElementById("lvesd").value); // Added LVESD
+  const ivsd = parseFloat(document.getElementById("ivsd").value);
+  const pwtd = parseFloat(document.getElementById("pwtd").value);
+  const la_volume = parseFloat(document.getElementById("la_volume").value);
+
+    // Input Validation and Calculation - Calculate what's possible
+    let bsa = NaN;
+    let lv_mass = NaN;
+    let lvmi = NaN;
+    let rwt = NaN;
+    let lavi = NaN;
+    let edv = NaN;
+    let esv = NaN;
+    let sv = NaN;
+    let ef = NaN;
+
+
+    if (!isNaN(height) && !isNaN(weight)){
+        bsa = Math.sqrt((height * weight) / 3600);
+    }
+
+    if (!isNaN(lvedd) && !isNaN(ivsd) && !isNaN(pwtd)){
+        lv_mass = 0.8 * (1.04 * ((lvedd + ivsd + pwtd)**3 - lvedd**3)) + 0.6;
+    }
+
+    if (!isNaN(lv_mass) && !isNaN(bsa) && bsa > 0) {
+        lvmi = lv_mass / bsa;
+    }
+
+    if (!isNaN(ivsd) && !isNaN(lvedd) && lvedd > 0) {
+        rwt = (2 * ivsd) / lvedd;
+    }
+
+    if (!isNaN(la_volume) && !isNaN(bsa) && bsa > 0) {
+        lavi = la_volume / bsa;
+    }
+
+    // Teichholz Formulas (using mm for LVEDD and LVESD)
+    if (!isNaN(lvedd)){
+        edv = (Math.PI * (lvedd/10)**3) / 6; //Converting mm to cm for volume calculation
+    }
+
+    if (!isNaN(lvesd)){
+        esv = (Math.PI * (lvesd/10)**3) / 6; //Converting mm to cm for volume calculation
+    }
+
+    if (!isNaN(edv) && !isNaN(esv)){
+        sv = edv - esv;
+    }
+
+    if (!isNaN(sv) && !isNaN(edv) && edv > 0){
+        ef = (sv / edv) * 100;
+    }
+
+
+  document.getElementById("bsa").textContent = isNaN(bsa) ? "" : bsa.toFixed(2);
+  document.getElementById("lv_mass").textContent = isNaN(lv_mass) ? "" : lv_mass.toFixed(2);
+  document.getElementById("lvmi").textContent = isNaN(lvmi) ? "" : lvmi.toFixed(2);
+  document.getElementById("rwt").textContent = isNaN(rwt) ? "" : rwt.toFixed(2);
+  document.getElementById("lavi").textContent = isNaN(lavi) ? "" : lavi.toFixed(2);
+  document.getElementById("edv").textContent = isNaN(edv) ? "" : edv.toFixed(2);
+  document.getElementById("esv").textContent = isNaN(esv) ? "" : esv.toFixed(2);
+  document.getElementById("sv").textContent = isNaN(sv) ? "" : sv.toFixed(2);
+  document.getElementById("ef").textContent = isNaN(ef) ? "" : isNaN(ef) ? "" : ef.toFixed(2);
+
+}
+
+// Initial calculation (in case of pre-filled values)
+calculate();
+
+</script>
+
+</body>
+</html>
