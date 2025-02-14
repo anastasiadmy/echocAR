@@ -137,23 +137,39 @@ calculate();
 
 </script>
 
-  from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import Flow
+// Load the Google Picker library.
+<script src="https://apis.google.com/js/api.js?onload=onLoad"></script>
 
-# ... (Code to handle OAuth 2.0 flow and get credentials)
+function onLoad() {
+  gapi.load('picker', { 'callback': createPicker });
+}
 
-service = build('drive', 'v3', credentials=credentials)
+function createPicker() {
+  var picker = new google.picker.PickerBuilder()
+    .addView(new google.picker.DocsView()) // Or a different view if needed
+    .setOAuthToken(oauthToken) // Get the OAuth token (see below)
+    .setDeveloperKey('YOUR_API_KEY') // Your API key
+    .setCallback(pickerCallback)
+    .build();
+  picker.setVisible(true);
+}
 
-# Create a folder (optional)
-file_metadata = {'name': 'My Website Data', 'mimeType': 'application/vnd.google-apps.folder'}
-folder = service.files().create(body=file_metadata, fields='id').execute()
+function pickerCallback(data) {
+  if (data[google.picker.Response.ACTION] == google.picker.Response.PICKED) {
+    var doc = data[google.picker.Response.DOCUMENTS][0];
+    // 'doc' contains information about the selected file.
+    // If you uploaded a new file, it will be here.
+    console.log('File ID: ' + doc.id);
+    // You'll likely want to send the file ID to your server.
+  }
+}
 
-# Upload a file
-file_metadata = {'name': 'data.txt', 'parents': [folder.get('id')]} # Add to folder
-media = MediaFileUpload('path/to/data.txt', mimetype='text/plain')
-file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
-
-print(F'File ID: {file.get("id")}')
+// Function to handle OAuth 2.0 flow (simplified - you'll need a server-side component)
+function getOAuthToken() {
+  // ... (Code to redirect the user to Google for authorization)
+  // ... (Code to receive the authorization code and exchange it for a token)
+  return 'THE_OAUTH_2_TOKEN'; // Return the token
+}
   
 </body>
 </html>
