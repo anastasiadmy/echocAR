@@ -139,7 +139,7 @@ calculate();
 
 // Load the Google Picker library.
 <script src="https://apis.google.com/js/api.js?onload=onLoad"></script>
-
+<script>
 function onLoad() {
   gapi.load('picker', { 'callback': createPicker });
 }
@@ -170,6 +170,6 @@ function getOAuthToken() {
   // ... (Code to receive the authorization code and exchange it for a token)
   return 'THE_OAUTH_2_TOKEN'; // Return the token
 }
-  
+  </script>
 </body>
 </html>
