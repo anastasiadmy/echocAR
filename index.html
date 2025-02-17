@@ -5,6 +5,7 @@
 <style>
 body {
   font-family: sans-serif;
+  padding: 10px;
 }
 
 label {
@@ -14,9 +15,10 @@ label {
 
 input[type="text"], input[type="number"], select {
   width: 100%;
-  padding: 5px;
-  margin-bottom: 10px;
+  padding: 10px;
+  margin-bottom: 15px;
   border: 1px solid #ccc;
+  border-radius: 5px;
   box-sizing: border-box;
 }
 
@@ -25,9 +27,38 @@ input[type="text"], input[type="number"], select {
   font-weight: bold;
 }
 
+.highlighted {
+  background-color: yellow;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 600px) {
+  body {
+    padding: 5px;
+  }
+
+  h1, h2 {
+    font-size: 1.5em;
+  }
+
+  input[type="text"], input[type="number"], select {
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+
+  #results p {
+    font-size: 1em;
+  }
+}
+
+/* Desktop Styles */
 @media (min-width: 600px) {
   input[type="text"], input[type="number"], select {
     width: 200px;
+  }
+
+  h1, h2 {
+    font-size: 2em;
   }
 }
 
