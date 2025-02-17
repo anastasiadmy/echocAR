@@ -283,15 +283,12 @@ function calculateSimpsonEF() {
           </select>
         </td>
         <td colspan="2">
-          Стеноз: 
-          <select name="m_stenosis">
-            <option value="0">--</option>
-            <option value="1">мінімальна регургітація</option>
-            <option value="2">легка регургітація</option>
-            <option value="3">помірна регургітація</option>
-            <option value="4">важка регургітація</option>
-          </select>
-        </td>
+            Стеноз: 
+            <select name="m_stenosis" id="m_stenosis" onchange="toggleStenosisInputs()">
+              <option value="m_stenosis_0">--</option>
+              <option value="m_stenosis_yes">так</option>
+            </select>
+          </td>
         <td colspan="2">
           Стулки: 
           <select name="mk">
@@ -303,24 +300,6 @@ function calculateSimpsonEF() {
         </td>
       </tr>
     </table>
-  
-    <div id="calculator" class="hiden_calc">
-      <h2>PISA MK ТК недостатність</h2>
-      <label for="radial_distance">Radius (cm): </label>
-      <input type="number" id="radial_distance" step="0.1">
-  
-      <label for="aliasing_velocity">Найквіст Aliasing Velocity (cm/s): </label>
-      <input type="number" id="aliasing_velocity" step="0.1">
-  
-      <label for="peak_velocity">Peak Velocity of Mitral Regurgitant Jet (CW на МК/ТК) (cm/s): </label>
-      <input type="number" id="peak_velocity" step="0.1">
-  
-      <label for="vti">VTI of Mitral Regurgitant Jet (cm):</label>
-      <input type="number" id="vti" step="0.1">
-  
-      <button onclick="calculatePISA()">Calculate</button>
-      <div id="pisa_result" class="result"></div>
-    </div>
   
     <script>
       function toggleCalculator() {
@@ -339,37 +318,15 @@ function calculateSimpsonEF() {
         // Your existing calculatePISA function code here
         // ... (no changes needed in this function)
       }
-    </script>
-  
-
-<h2>МК</h2>
-<input type="text" id="mk" name="mk"><br>
-    <td colspan="2">Регургітація: <select name="m_reg">
-        <option value="m_reg_0">--</option>
-        <option value="m_reg_min">мінімальна регургітація</option>
-        <option value="m_reg_mild">легка регургітація</option>
-        <option value="m_reg_moderate">помірна регургітація</option>
-        <option value="m_reg_severe">важка регургітація</option>
-    </select></td>
-    <td colspan="2">Стеноз: <select name="m_stenosis">
-        <option value="0">--</option>
-        <option value="1">мінімальна регургітація</option>
-        <option value="2">легка регургітація</option>
-        <option value="3">помірна регургітація</option>
-        <option value="4">важка регургітація</option>
-    </select></td>
-
-    <td colspan="2">Стулки: <select name="mk">
-        <option value="0">--</option>
-        <option value="1">пролапс</option>
-        <option value="2">фіброз</option>
-        <option value="3">кальциноз</option>
-    </select></td>
- 
+    </script>  
 
 
 <div id="calculator" class="hiden_calc">
-    <h2>PISA МК і ТК недостатність</h2>
+    <h2>PISA МК недостатність</h2>
+
+    <label for="vc">VC(mm):</label>
+    <input type="number" class="highlighted" id="vc" name="vc"><br>
+
     <label for="radial_distance">Radius(cm):</label>
     <input type="number" id="radial_distance" step="0.1">
 
@@ -386,6 +343,63 @@ function calculateSimpsonEF() {
 
     <div id="pisa_result" class="result"></div>
 </div>
+
+<style>
+    .additional-inputs {
+      display: none; /* Initially hidden */
+    }
+    /* Other styles as needed */
+  </style>
+  </head>
+  <body>
+ 
+    <div id="calculator" class="hiden_calc">
+      <h2>PISA MK ТК недостатність</h2>
+      <label for="radial_distance">Radius (cm): </label>
+      <input type="number" id="radial_distance" step="0.1">
+  
+      <label for="aliasing_velocity">Найквіст Aliasing Velocity (cm/s): </label>
+      <input type="number" id="aliasing_velocity" step="0.1">
+  
+      <label for="peak_velocity">Peak Velocity of Mitral Regurgitant Jet (CW на МК/ТК) (cm/s): </label>
+      <input type="number" id="peak_velocity" step="0.1">
+  
+      <label for="vti">VTI of Mitral Regurgitant Jet (cm):</label>
+      <input type="number" id="vti" step="0.1">
+  
+      <button onclick="calculatePISA()">Calculate</button>
+      <div id="pisa_result" class="result"></div>
+    </div>
+  
+    <div id="stenosisInputs" class="additional-inputs">
+      <h2>Mitral Stenosis Assessment</h2>
+      <label for="mitral_valve_area">Mitral Valve Area:</label>
+      <input type="number" id="mitral_valve_area">
+  
+      <label for="mean_gradient">Mean Gradient:</label>
+      <input type="number" id="mean_gradient">
+  
+      <label for="pht">PHT:</label>
+      <input type="number" id="pht">
+    </div>
+  
+    <script>
+      // ... (Your existing toggleCalculator and calculatePISA functions)
+  
+      function toggleStenosisInputs() {
+        const stenosisSelect = document.getElementById("m_stenosis");
+        const stenosisInputsDiv = document.getElementById("stenosisInputs");
+        const selectedValue = stenosisSelect.value;
+  
+        if (selectedValue === "m_stenosis_yes") {
+          stenosisInputsDiv.style.display = "block";
+        } else {
+          stenosisInputsDiv.style.display = "none";
+        }
+      }
+    </script>
+  
+  </body>
 
 <div id="calculator">
     <h2>AС (Continuity Equation)</h2>
@@ -424,8 +438,8 @@ function calculateSimpsonEF() {
         const flowRate = regurgitantVolume / (vti/peakVelocity) ; //Volume Flow Rate (ml/s)
 
         document.getElementById("pisa_result").innerHTML = `
-            Effective Regurgitant Orifice Area: ${eroArea.toFixed(2)} cm²<br>
-            Regurgitant Volume: ${regurgitantVolume.toFixed(2)} mL <br>
+            ПЕРО: ${eroArea.toFixed(2)} cm²<br>
+            ОР: ${regurgitantVolume.toFixed(2)} mL <br>
             Volume Flow Rate: ${flowRate.toFixed(2)} mL/s
         `;
     }
