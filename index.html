@@ -364,10 +364,26 @@ function calculateSimpsonEF() {
       <input type="number" id="mean_gradient">
   
       <label for="pht">PHT (A4C CW i PHT):</label>
-      <input type="number" id="pht">
+      <input type="number" id="pht" oninput="calculateValveArea()">  <div class="result">Mitral Valve Area (calculated): <span id="calculated_mva"></span></div> </div>
+      
     </div>
   
     <script>
+
+
+    function calculateValveArea() {
+      const pht = parseFloat(document.getElementById("pht").value);
+
+      if (isNaN(pht) || pht <= 0) {
+        document.getElementById("calculated_mva").textContent = ""; // Clear if invalid input
+        return;
+      }
+
+      const mva = 220 / pht;
+      document.getElementById("calculated_mva").textContent = mva.toFixed(2);
+    }
+
+
       // ... (Your existing toggleCalculator and calculatePISA functions)
   
       function toggleStenosisInputs() {
@@ -451,23 +467,32 @@ function calculateSimpsonEF() {
 </script>
 
 
-<div id="calculator">
-    <h2>Mitral Valve Area Calculator (Continuity Equation)</h2>
-    <label for="lvot_diameter_mva">LVOT Diameter (cm):</label>
-    <input type="number" id="lvot_diameter_mva" step="0.1">
+ <div id="calculator">
+    <h2>MС по РНТ CW + mean grad(+ планіметрія в PSAX)</h2>
+    <label for="pht">Pressure Half-Time (ms):</label>
+    <input type="number" id="pht" step="0.1">
 
-    <label for="lvot_vti_mva">LVOT VTI (cm):</label>
-    <input type="number" id="lvot_vti_mva" step="0.1">
+    <button onclick="calculateMVA_PHT()">Calculate</button>
 
-    <label for="mv_vti">Mitral Valve VTI (cm):</label>
-    <input type="number" id="mv_vti" step="0.1">
-
-    <button onclick="calculateMVA()">Calculate</button>
-
-    <div id="mva_result" class="result"></div>
+    <div id="mva_pht_result" class="result"></div>
 </div>
 
- <div id="calculator">
+<script>
+
+    function calculateMVA_PHT() {
+        const pht = parseFloat(document.getElementById("pht").value);
+
+        if (isNaN(pht) || pht < 0) {
+            document.getElementById("mva_pht_result").textContent = "Please enter a valid non-negative number.";
+            return;
+        }
+
+        const mva = 220 / pht; //MVA=220/PHT
+
+        document.getElementById("mva_pht_result").textContent = "Mitral Valve Area (PHT): " + mva.toFixed(2) + " cm²";
+    }
+</script>
+<div id="calculator">
     <h2>MС по РНТ CW + mean grad(+ планіметрія в PSAX)</h2>
     <label for="pht">Pressure Half-Time (ms):</label>
     <input type="number" id="pht" step="0.1">
