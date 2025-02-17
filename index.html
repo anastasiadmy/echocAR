@@ -353,33 +353,17 @@ function calculateSimpsonEF() {
   </head>
   <body>
  
-    <div id="calculator" class="hiden_calc">
-      <h2>PISA MK ТК недостатність</h2>
-      <label for="radial_distance">Radius (cm): </label>
-      <input type="number" id="radial_distance" step="0.1">
-  
-      <label for="aliasing_velocity">Найквіст Aliasing Velocity (cm/s): </label>
-      <input type="number" id="aliasing_velocity" step="0.1">
-  
-      <label for="peak_velocity">Peak Velocity of Mitral Regurgitant Jet (CW на МК/ТК) (cm/s): </label>
-      <input type="number" id="peak_velocity" step="0.1">
-  
-      <label for="vti">VTI of Mitral Regurgitant Jet (cm):</label>
-      <input type="number" id="vti" step="0.1">
-  
-      <button onclick="calculatePISA()">Calculate</button>
-      <div id="pisa_result" class="result"></div>
-    </div>
+
   
     <div id="stenosisInputs" class="additional-inputs">
       <h2>Mitral Stenosis Assessment</h2>
-      <label for="mitral_valve_area">Mitral Valve Area:</label>
+      <label for="mitral_valve_area">ПМО - планіметрія (psax обводимо площу):</label>
       <input type="number" id="mitral_valve_area">
   
-      <label for="mean_gradient">Mean Gradient:</label>
+      <label for="mean_gradient">Mean Gradient (A4C CW і VTI):</label>
       <input type="number" id="mean_gradient">
   
-      <label for="pht">PHT:</label>
+      <label for="pht">PHT (A4C CW i PHT):</label>
       <input type="number" id="pht">
     </div>
   
