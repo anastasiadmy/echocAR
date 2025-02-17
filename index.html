@@ -4,15 +4,17 @@
 <title>Echocardiography Ultrasound Form</title>
 <style>
 body {
-  font-family: sans-serif;
-label {
-  display: block;
-  margin-bottom: 5px;
-input[type="text"], input[type="number"], select {
-  width: 200px;
-  padding: 5px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
+    font-size: 14px; /* Default font size for mobile */
+}
+
+@media (min-width: 768px) {
+    body {
+        font-size: 16px; /* Larger font size for desktop */
+    }
+    h1 {
+        font-size: 2em;
+    }
+    /* ... other desktop styles ... */
 }
 #results {
   margin-top: 20px;
