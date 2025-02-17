@@ -344,15 +344,7 @@ function calculateSimpsonEF() {
     <div id="pisa_result" class="result"></div>
 </div>
 
-<style>
-    .additional-inputs {
-      display: none; /* Initially hidden */
-    }
-    /* Other styles as needed */
-  </style>
-  </head>
-  <body>
- 
+
 
   
     <div id="stenosisInputs" class="additional-inputs">
@@ -467,40 +459,6 @@ function calculateSimpsonEF() {
 </script>
 
 
- <div id="calculator">
-    <h2>MС по РНТ CW + mean grad(+ планіметрія в PSAX)</h2>
-    <label for="pht">Pressure Half-Time (ms):</label>
-    <input type="number" id="pht" step="0.1">
-
-    <button onclick="calculateMVA_PHT()">Calculate</button>
-
-    <div id="mva_pht_result" class="result"></div>
-</div>
-
-<script>
-
-    function calculateMVA_PHT() {
-        const pht = parseFloat(document.getElementById("pht").value);
-
-        if (isNaN(pht) || pht < 0) {
-            document.getElementById("mva_pht_result").textContent = "Please enter a valid non-negative number.";
-            return;
-        }
-
-        const mva = 220 / pht; //MVA=220/PHT
-
-        document.getElementById("mva_pht_result").textContent = "Mitral Valve Area (PHT): " + mva.toFixed(2) + " cm²";
-    }
-</script>
-<div id="calculator">
-    <h2>MС по РНТ CW + mean grad(+ планіметрія в PSAX)</h2>
-    <label for="pht">Pressure Half-Time (ms):</label>
-    <input type="number" id="pht" step="0.1">
-
-    <button onclick="calculateMVA_PHT()">Calculate</button>
-
-    <div id="mva_pht_result" class="result"></div>
-</div>
 
 <script>
     // ... (PISA and AVA calculation functions - same as before) ...
@@ -522,19 +480,122 @@ function calculateSimpsonEF() {
         document.getElementById("mva_result").textContent = "Mitral Valve Area (Continuity): " + mva.toFixed(2) + " cm²";
     }
 
-    function calculateMVA_PHT() {
-        const pht = parseFloat(document.getElementById("pht").value);
+    function calculatePISATK() {
+            // ... (PISA calculation code - same as before) ...
+            const radialDistance = parseFloat(document.getElementById("radial_distance").value);
+            const aliasingVelocity = parseFloat(document.getElementById("aliasing_velocity").value);
+            const peakVelocity = parseFloat(document.getElementById("peak_velocity").value);
+            const vti = parseFloat(document.getElementById("vti").value);
 
-        if (isNaN(pht) || pht < 0) {
-            document.getElementById("mva_pht_result").textContent = "Please enter a valid non-negative number.";
-            return;
-        }
+            if (isNaN(radialDistance) || isNaN(aliasingVelocity) || isNaN(peakVelocity) || isNaN(vti) ||
+                radialDistance < 0 || aliasingVelocity < 0 || peakVelocity < 0 || vti < 0) {
+                document.getElementById("pisa_result").textContent = "Please enter valid non-negative numbers.";
+                return;
+            }
 
-        const mva = 220 / pht; //MVA=220/PHT
-
-        document.getElementById("mva_pht_result").textContent = "Mitral Valve Area (PHT): " + mva.toFixed(2) + " cm²";
-    }
+ 
 </script>
 
+<style>
+  .additional-inputs {
+    display: none; /* Приховано за замовчуванням */
+  }
+</style>
+</head>
+<body>
+
+  <h2>ТК</h2>
+  <input type="text" id="tk_reg" name="tk_reg"><br>
+
+  <table>
+    <tr>
+      <td colspan="2">
+        Регургітація:
+        <select name="t_reg" id="t_reg" onchange="toggleRegurgitationInputs()">
+          <option value="t_reg_0">--</option>
+          <option value="t_reg_1">мінімальна регургітація</option>
+          <option value="t_reg_2">легка регургітація</option>
+          <option value="t_reg_3">помірна регургітація</option>
+          <option value="t_reg_4">важка регургітація</option>
+        </select>
+      </td>
+      <td colspan="2">
+        Стеноз:
+        <select name="t_stenosis" id="t_stenosis" onchange="toggleStenosisInputs()">
+          <option value="t_stenosis_0">--</option>
+          <option value="t_stenosis_yes">так</option>
+        </select>
+      </td>
+      <td colspan="2">
+        Стулки:
+        <select name="tk">
+          <option value="tk_0">--</option>
+          <option value="tk_1">пролапсс</option>
+          <option value="tk_2">фіброз</option>
+          <option value="tk_3">кальциноз</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+
+  <div id="regurgitationInputs" class="additional-inputs">
+    <label for="max_gradient_velocity">Max градієнт та швидкість:</label>
+    <input type="number" id="max_gradient_velocity"><br>
+
+    <div id="tk_pisaCalculator" class="additional-inputs">
+      <h3>PISA Трикуспідальна регургітація</h3>
+      <label for="tk_radial_distance">Радіальна відстань від отвору (r):</label>
+      <input type="number" id="tk_radial_distance" step="0.1"><br>
+
+      <label for="tk_aliasing_velocity">Швидкість aliasing на радіальній відстані (Vr):</label>
+      <input type="number" id="tk_aliasing_velocity" step="0.1"><br>
+
+      <label for="tk_peak_velocity">Пікова швидкість трикуспідального регургітаційного струменя (Vmax):</label>
+      <input type="number" id="tk_peak_velocity" step="0.1"><br>
+
+      <label for="tk_vti">VTI трикуспідального регургітаційного струменя:</label>
+      <input type="number" id="tk_vti" step="0.1"><br>
+
+      <button onclick="calculatetkPISA()">Розрахувати</button>
+      <div id="tk_pisa_result"></div>
+    </div>
+  </div>
+
+  <script>
+    function toggleRegurgitationInputs() {
+      const tRegSelect = document.getElementById("t_reg");
+      const regurgitationInputsDiv = document.getElementById("regurgitationInputs");
+      const tk_pisaCalculator = document.getElementById("tk_pisaCalculator");
+      const selectedValue = tRegSelect.value;
+
+      regurgitationInputsDiv.style.display = (selectedValue !== "t_reg_0") ? "block" : "none";
+      tk_pisaCalculator.style.display = (selectedValue === "t_reg_3" || selectedValue === "t_reg_4") ? "block" : "none";
+    }
+
+    function calculatetkPISA() {
+      const r = parseFloat(document.getElementById("tk_radial_distance").value);
+      const Vr = parseFloat(document.getElementById("tk_aliasing_velocity").value);
+      const Vmax = parseFloat(document.getElementById("tk_peak_velocity").value);
+      const VTI = parseFloat(document.getElementById("tk_vti").value);
+
+      if (isNaN(r) || isNaN(Vr) || isNaN(Vmax) || isNaN(VTI) ||
+          r < 0 || Vr < 0 || Vmax <= 0 || VTI < 0) {
+        document.getElementById("tk_pisa_result").textContent = "Будь ласка, введіть дійсні невід'ємні числа.";
+        return;
+      }
+
+      const VFR = 2 * Math.PI * r * r * Vr;
+      const ERO = VFR / Vmax;
+      const RVol = ERO * VTI;
+
+      document.getElementById("tk_pisa_result").innerHTML = `
+        Об'ємний потік (VFR): ${VFR.toFixed(2)} мл/с<br>
+        ПЕРО: ${ERO.toFixed(2)} мм²<br>
+        РО: ${RVol.toFixed(2)} мл/удар
+      `;
+    }
+  </script>
+
+</body>
 </body>
 </html>
