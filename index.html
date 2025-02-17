@@ -4,37 +4,33 @@
 <title>Echocardiography Ultrasound Form</title>
 <style>
 body {
-    font-size: 14px; /* Default font size for mobile */
+  font-family: sans-serif;
 }
 
-@media (min-width: 768px) {
-    body {
-        font-size: 16px; /* Larger font size for desktop */
-    }
-    h1 {
-        font-size: 2em;
-    }
-    /* ... other desktop styles ... */
+label {
+  display: block;
+  margin-bottom: 5px;
 }
+
+input[type="text"], input[type="number"], select {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
 #results {
   margin-top: 20px;
   font-weight: bold;
 }
-/* Mobile Responsive Styles */
-@media (max-width: 600px) { /* Adjust breakpoint as needed */
-    select {
-        font-size: 14px; /* Slightly smaller font size on mobile */
-        padding: 5px 25px; /* Adjust padding for smaller screens */
-        background-position: right 5px center; /* Position arrow */
-        background-size: 1.2em 1.2em; /* Adjust arrow size */
-    }
 
-    select option {
-        font-size: 14px; /* Slightly smaller font size on mobile */
-    }
-
-    /* You can add other mobile-specific styles here */
+@media (min-width: 600px) {
+  input[type="text"], input[type="number"], select {
+    width: 200px;
+  }
 }
+
 </style>
 </head>
 <body>
