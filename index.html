@@ -1,608 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Echocardiography Calculators</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            margin: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input[type="number"] {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            box-sizing: border-box; /* Ensures padding doesn't affect width */
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            box-sizing: border-box; /* Ensures padding doesn't affect width */
-        }
-        .calculator {
-            border: 1px solid #ccc;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-        .result {
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        /* Responsive design adjustments */
-        @media (min-width: 768px) {
-            .calculator {
-                width: 50%; /* Adjust as needed for larger screens */
-                margin: 20px auto; /* Center on larger screens */
-            }
-        }
-
-        select {
-    appearance: none; /* Remove default arrow */
-    -webkit-appearance: none; /* For Safari */
-    -moz-appearance: none; /* For Firefox */
-    background-color: #fff; /* Set background color */
-    border: 1px solid #ccc; /* Add border */
-    padding: 5px 10px; /* Adjust padding */
-    font-size: 16px; /* Set font size */
-    border-radius: 5px; /* Add rounded corners */
-    width: 100%; /* Make select full-width */
-    box-sizing: border-box; /* Include padding and border in width */
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3e%3cpath fill='rgba(51, 51, 51, 1)' d='M7 10l5 5 5-5z'/%3e%3c/svg%3e"); /* Add custom arrow */
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 1.5em 1.5em;
-    padding-right: 30px; /* Adjust padding to make space for arrow */
-    cursor: pointer; /* Make cursor pointer on hover */
-}
-
-/* Style the options */
-select option {
-    font-size: 16px; /* Set font size */
-    padding: 5px; /* Add padding */
-}
-
-/* Hover effect for options */
-select option:hover {
-    background-color: #f0f0f0; /* Add hover background color */
-}
-
-/* Focus style for select */
-select:focus {
-    outline: none; /* Remove default outline */
-    border-color: #4CAF50; /* Highlight border on focus */
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3); /* Add a subtle shadow */
-}
-
-/* Disable default select arrow in IE */
-select::-ms-expand {
-    display: none;
-}
-    </style>
-</head>
-<body>
-
-    <h1>Echocardiography Calculators</h1>
-    <label for="patient_name">Patient Name:</label>
-    <input type="text" id="patient_name" name="patient_name" required><br><br>
-
-    <div class="calculator">
-        <h2>BSA Calculator</h2>
-        <label for="height">Height (cm):</label>
-        <input type="number" id="height" oninput="calculateBSA()">
-        <label for="weight">Weight (kg):</label>
-        <input type="number" id="weight" oninput="calculateBSA()">
-        <div class="result" id="bsaResult">BSA: </div>
-    </div>
-
-    <div class="calculator">
-        <h2>LV Mass Calculator</h2>
-        <label for="ivs">IVS (mm):</label>
-        <input type="number" id="ivs" oninput="calculateLVMass()">
-        <label for="lvedd">LVEDD (mm):</label>
-        <input type="number" id="lvedd" oninput="calculateLVMass(); document.getElementById('lvedd_teich').value = this.value; calculateTeichholz();">
-        <label for="pw">PWd (mm):</label>
-        <input type="number" id="pw" oninput="calculateLVMass()">
-        <div class="result" id="lvMassResult">LV Mass: </div>
-        <div class="result" id="lvmiResult">LVMI: </div>
-        <div class="result" id="rwtResult">RWT: </div>
-    </div>
-
-
-    <script>
-        function calculateBSA() {
-            const height = parseFloat(document.getElementById("height").value);
-            const weight = parseFloat(document.getElementById("weight").value);
-            if (isNaN(height) || isNaN(weight)) return;
-
-            const bsa = 0.007184 * Math.pow(height, 0.725) * Math.pow(weight, 0.425); // Mosteller formula
-            document.getElementById("bsaResult").textContent = "BSA: " + bsa.toFixed(2) + " m²";
-
-            // Recalculate LAVI and LVMI when BSA changes
-            calculateLAVI();
-            calculateLVMI();
-            calculateRWT();
-        }
-
-        function calculateLAVI() {
-            const laVolume = parseFloat(document.getElementById("laVolume").value);
-            const bsa = parseFloat(document.getElementById("bsaResult").textContent.replace("BSA: ", "").replace(" m²", ""));
-            if (isNaN(laVolume) || isNaN(bsa)) return;
-
-            const lavi = laVolume / bsa;
-            document.getElementById("laviResult").textContent = "LAVI: " + lavi.toFixed(2) + " ml/m²";
-        }
-
-        function calculateLVMass() {
-            const ivs = parseFloat(document.getElementById("ivs").value);
-            const lvedd = parseFloat(document.getElementById("lvedd").value);
-            const pw = parseFloat(document.getElementById("pw").value);
-            if (isNaN(ivs) || isNaN(lvedd) || isNaN(pw)) return;
-
-            const lvMass = 0.8 * 1.04 * ((lvedd + ivs + pw) ** 3 - lvedd ** 3) + 0.6; // Devereux formula
-            document.getElementById("lvMassResult").textContent = "LV Mass: " + lvMass.toFixed(2) + " g";
-            calculateLVMI(); // Recalculate LVMI when LV Mass changes
-            calculateRWT(); // Recalculate RWT when LV Mass changes
-        }
-
-        function calculateLVMI() {
-            const lvMass = parseFloat(document.getElementById("lvMassResult").textContent.replace("LV Mass: ", "").replace(" g", ""));
-            const bsa = parseFloat(document.getElementById("bsaResult").textContent.replace("BSA: ", "").replace(" m²", ""));
-            if (isNaN(lvMass) || isNaN(bsa)) return;
-
-            const lvmi = lvMass / bsa;
-            document.getElementById("lvmiResult").textContent = "LVMI: " + lvmi.toFixed(2) + " g/m²";
-        }
-
-        function calculateRWT() {
-          const pw = parseFloat(document.getElementById("pw").value);
-          const lvedd = parseFloat(document.getElementById("lvedd").value);
-          if (isNaN(pw) || isNaN(lvedd)) return;
-          const rwt = (2 * pw) / lvedd;
-          document.getElementById("rwtResult").textContent = "RWT: " + rwt.toFixed(2);
-        }
-
-    </script>
-
-<h1>Teichholz Formula Calculator</h1>
-
-<label for="lvedd_teich">LVEDD (mm):</label>
-<input type="number" id="lvedd_teich" oninput="calculateTeichholz()">
-
-<label for="lvesd_teich">LVESD (mm):</label>
-<input type="number" id="lvesd_teich" oninput="calculateTeichholz()">
-
-<div class="result">EDV: <span id="edv_teich"></span></div>
-<div class="result">ESV: <span id="esv_teich"></span></div>
-<div class="result">SV: <span id="sv_teich"></span></div>
-<div class="result">EF: <span id="ef_teich"></span></div>
-
-<script>
-function calculateTeichholz() {
-  const lvedd = parseFloat(document.getElementById("lvedd_teich").value);
-  const lvesd = parseFloat(document.getElementById("lvesd_teich").value);
-
-  if (isNaN(lvedd) || isNaN(lvesd) || lvedd <= 0 || lvesd <= 0) {
-    document.getElementById("edv_teich").textContent = "";
-    document.getElementById("esv_teich").textContent = "";
-    document.getElementById("sv_teich").textContent = "";
-    document.getElementById("ef_teich").textContent = "";
-    return; // Stop calculation if inputs are invalid
+<title>Plaque Characteristics</title>
+<style>
+  .plaque-container {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: none; /* Initially hide the containers */
   }
 
-  const edv = (7.0 / (2.4 + lvedd)) * lvedd**3;
-  const esv = (7.0 / (2.4 + lvesd)) * lvesd**3;
-  const sv = edv - esv;
-  const ef = ((edv - esv) / edv) * 100;
-
-  document.getElementById("edv_teich").textContent = edv.toFixed(2);
-  document.getElementById("esv_teich").textContent = esv.toFixed(2);
-  document.getElementById("sv_teich").textContent = sv.toFixed(2);
-  document.getElementById("ef_teich").textContent = ef.toFixed(2);
-}
-</script>
-<label for="acct">ACCT (ms):</label>
-<input type="number" class="highlighted" id="acct" name="acct"><br>
-
-<div class="grid-item">
-    <h2>Aorta</h2>
-    <label for="lvot_anulus">LVOT/Anulus (mm):</label>
-    <input type="number" class="highlighted" id="lvot_anulus" name="lvot_anulus"><br>
-    <label for="sinus">Sinus (mm):</label>
-    <input type="number" class="highlighted" id="sinus" name="sinus"><br>
-    <label for="ac_aorta">Ac aorta (mm):</label>
-    <input type="number" class="highlighted" id="ac_aorta" name="ac_aorta"><br>
-    <label for="la_diametr">LA diametr (mm):</label>
-    <input type="number" class="highlighted" id="la_diametr" name="la_diametr"><br>
-    <label for="basal">Basal+mid (mm):</label>
-    <input type="number" class="highlighted" id="basal" name="basal"><br>
-    <label for="pp">ΠΠ:</label>
-    <input type="number" class="highlighted" id="pp" name="pp"><br>
-    <label for="e_a">E/A:</label>
-    <input type="text" class="highlighted" id="e_a" name="e_a"><br>
-</div>
-<div class="calculator">
-    <h2>LAVI Calculator</h2>
-    <label for="laVolume">LA Volume (ml):</label>
-    <input type="number" id="laVolume" oninput="calculateLAVI()">
-    <div class="result" id="laviResult">LAVI: </div>
-</div>
-<div class="calculator">
-    <label for="ef_simpson">EF Simpson (%):</label>
-    <input type="number" id="ef_simpson" name="ef_simpson"><br>
-    <label for="edv_simpson">EDV:</label>
-    <input type="number" id="edv_simpson" oninput="calculateSimpsonEF()">
-    <label for="esv_simpson">ESV:</label>
-    <input type="number" id="esv_simpson" oninput="calculateSimpsonEF()">
-<div class="result">EF: <span id="ef_simpson"></span></div>
-
-</div>
-<script>
-function calculateSimpsonEF() {
-  const edv = parseFloat(document.getElementById("edv_simpson").value);
-  const esv = parseFloat(document.getElementById("esv_simpson").value);
-
-  if (isNaN(edv) || isNaN(esv) || edv <= 0 || esv <= 0) {
-    document.getElementById("ef_simpson").textContent = ""; // Clear if inputs are invalid
-    return; // Stop calculation if inputs are invalid
+  .plaque-container.show {
+    display: block; /* Show the container when the class 'show' is added */
   }
 
-  const ef = ((edv - esv) / edv) * 100;
-  document.getElementById("ef_simpson").textContent = ef.toFixed(2);
-}
-</script>
+  .plaque-list {
+    list-style: none;
+    padding: 0;
+  }
 
-<style>
-    .hiden_calc {
-      display: none; /* Initially hidden */
+  /* Responsive design for smaller screens */
+  @media (max-width: 600px) {
+    .plaque-container {
+      width: 100%; /* Make containers full width on small screens */
     }
-    /* Other styles as needed */
-  </style>
-  </head>
-  <body>
-  
-    <h2>MK</h2>
-    <input type="text" id="mk" name="mk"><br>
-  
-    <table>
-      <tr>
-        <td colspan="2">
-          Регургітація: 
-          <select name="m_reg" id="m_reg" onchange="toggleCalculator()">
-            <option value="m_reg_0">--</option>
-            <option value="m_reg_min">мінімальна регургітація</option>
-            <option value="m_reg_mild">легка регургітація</option>
-            <option value="m_reg_moderate">помірна регургітація</option>
-            <option value="m_reg_severe">важка регургітація</option>
-          </select>
-        </td>
-        <td colspan="2">
-            Стеноз: 
-            <select name="m_stenosis" id="m_stenosis" onchange="toggleStenosisInputs()">
-              <option value="m_stenosis_0">--</option>
-              <option value="m_stenosis_yes">так</option>
-            </select>
-          </td>
-        <td colspan="2">
-          Стулки: 
-          <select name="mk">
-            <option value="0">--</option>
-            <option value="1">пролапсc</option>
-            <option value="2">фіброз</option>
-            <option value="3">кальциноз</option>
-          </select>
-        </td>
-      </tr>
-    </table>
-  
-    <script>
-      function toggleCalculator() {
-        const mRegSelect = document.getElementById("m_reg");
-        const calculatorDiv = document.getElementById("calculator");
-        const selectedValue = mRegSelect.value;
-  
-        if (selectedValue === "m_reg_moderate" || selectedValue === "m_reg_severe") {
-          calculatorDiv.style.display = "block"; // Show the calculator
-        } else {
-          calculatorDiv.style.display = "none"; // Hide the calculator
-        }
-      }
-  
-      function calculatePISA() {
-        // Your existing calculatePISA function code here
-        // ... (no changes needed in this function)
-      }
-    </script>  
-
-
-<div id="calculator" class="hiden_calc">
-    <h2>PISA МК недостатність</h2>
-
-    <label for="vc">VC(mm):</label>
-    <input type="number" class="highlighted" id="vc" name="vc"><br>
-
-    <label for="radial_distance">Radius(cm):</label>
-    <input type="number" id="radial_distance" step="0.1">
-
-    <label for="aliasing_velocity">Найквіст Aliasing Velocity (cm/s):</label>
-    <input type="number" id="aliasing_velocity" step="0.1">
-
-    <label for="peak_velocity">Peak Velocity of Mitral Regurgitant Jet (CW на МК/ТК) (cm/s):</label>
-    <input type="number" id="peak_velocity" step="0.1">
-
-    <label for="vti">VTI of Mitral Regurgitant Jet (cm):</label>
-    <input type="number" id="vti" step="0.1">
-
-    <button onclick="calculatePISA()">Calculate</button>
-
-    <div id="pisa_result" class="result"></div>
-</div>
-
-
-
-  
-    <div id="stenosisInputs" class="additional-inputs">
-      <h2>Mitral Stenosis Assessment</h2>
-      <label for="mitral_valve_area">ПМО - планіметрія (psax обводимо площу):</label>
-      <input type="number" id="mitral_valve_area">
-  
-      <label for="mean_gradient">Mean Gradient (A4C CW і VTI):</label>
-      <input type="number" id="mean_gradient">
-  
-      <label for="pht">PHT (A4C CW i PHT):</label>
-      <input type="number" id="pht" oninput="calculateValveArea()">  <div class="result">Mitral Valve Area (calculated): <span id="calculated_mva"></span></div> </div>
-      
-    </div>
-  
-    <script>
-
-
-    function calculateValveArea() {
-      const pht = parseFloat(document.getElementById("pht").value);
-
-      if (isNaN(pht) || pht <= 0) {
-        document.getElementById("calculated_mva").textContent = ""; // Clear if invalid input
-        return;
-      }
-
-      const mva = 220 / pht;
-      document.getElementById("calculated_mva").textContent = mva.toFixed(2);
-    }
-
-
-      // ... (Your existing toggleCalculator and calculatePISA functions)
-  
-      function toggleStenosisInputs() {
-        const stenosisSelect = document.getElementById("m_stenosis");
-        const stenosisInputsDiv = document.getElementById("stenosisInputs");
-        const selectedValue = stenosisSelect.value;
-  
-        if (selectedValue === "m_stenosis_yes") {
-          stenosisInputsDiv.style.display = "block";
-        } else {
-          stenosisInputsDiv.style.display = "none";
-        }
-      }
-    </script>
-  
-  </body>
-
-  <h2>АК</h2>
-  <label for="ak">ak:</label>
-  <input type="text" class="highlighted" id="ak" name="ak"><br>
-  
-<div id="calculator">
-    <h2>AС (Continuity Equation)</h2>
-    <label for="lvot_diameter">LVOT Diameter (cm):</label>
-    <input type="number" id="lvot_diameter" step="0.1">
-
-    <label for="lvot_vti">LVOT VTI (PW) (cm):</label>
-    <input type="number" id="lvot_vti" step="0.1">
-
-    <label for="av_vti">Aortic Valve VTI (CW) (cm):</label>
-    <input type="number" id="av_vti" step="0.1">
-
-    <button onclick="calculateAVA()">Calculate</button>
-
-    <div id="ava_result" class="result"></div>
-</div>
-
-
-<script>
-    function calculatePISA() {
-        // ... (PISA calculation code - same as before) ...
-        const radialDistance = parseFloat(document.getElementById("radial_distance").value);
-        const aliasingVelocity = parseFloat(document.getElementById("aliasing_velocity").value);
-        const peakVelocity = parseFloat(document.getElementById("peak_velocity").value);
-        const vti = parseFloat(document.getElementById("vti").value);
-
-        if (isNaN(radialDistance) || isNaN(aliasingVelocity) || isNaN(peakVelocity) || isNaN(vti) ||
-            radialDistance < 0 || aliasingVelocity < 0 || peakVelocity < 0 || vti < 0) {
-            document.getElementById("pisa_result").textContent = "Please enter valid non-negative numbers.";
-            return;
-        }
-
-        // Calculations
-        const eroArea = (2 * Math.PI * Math.pow(radialDistance, 2) * aliasingVelocity) / peakVelocity; // Effective Regurgitant Orifice Area (cm^2)
-        const regurgitantVolume = eroArea * vti; // Regurgitant Volume (mL)
-        const flowRate = regurgitantVolume / (vti/peakVelocity) ; //Volume Flow Rate (ml/s)
-
-        document.getElementById("pisa_result").innerHTML = `
-            ПЕРО: ${eroArea.toFixed(2)} cm²<br>
-            ОР: ${regurgitantVolume.toFixed(2)} mL <br>
-            Volume Flow Rate: ${flowRate.toFixed(2)} mL/s
-        `;
-    }
-
-
-    function calculateAVA() {
-        const lvotDiameter = parseFloat(document.getElementById("lvot_diameter").value);
-        const lvotVti = parseFloat(document.getElementById("lvot_vti").value);
-        const avVti = parseFloat(document.getElementById("av_vti").value);
-
-        if (isNaN(lvotDiameter) || isNaN(lvotVti) || isNaN(avVti) ||
-            lvotDiameter < 0 || lvotVti < 0 || avVti < 0) {
-            document.getElementById("ava_result").textContent = "Please enter valid non-negative numbers.";
-            return;
-        }
-
-        // Calculate LVOT Area
-        const lvotArea = Math.PI * Math.pow(lvotDiameter / 2, 2);
-
-        // Calculate Aortic Valve Area (AVA) using the continuity equation
-        const ava = (lvotArea * lvotVti) / avVti;
-
-        document.getElementById("ava_result").textContent = "Aortic Valve Area: " + ava.toFixed(2) + " cm²";
-    }
-</script>
-
-
-
-<script>
-    // ... (PISA and AVA calculation functions - same as before) ...
-
-    function calculateMVA() {
-        const lvotDiameter = parseFloat(document.getElementById("lvot_diameter_mva").value);
-        const lvotVti = parseFloat(document.getElementById("lvot_vti_mva").value);
-        const mvVti = parseFloat(document.getElementById("mv_vti").value);
-
-        if (isNaN(lvotDiameter) || isNaN(lvotVti) || isNaN(mvVti) ||
-            lvotDiameter < 0 || lvotVti < 0 || mvVti < 0) {
-            document.getElementById("mva_result").textContent = "Please enter valid non-negative numbers.";
-            return;
-        }
-
-        const lvotArea = Math.PI * Math.pow(lvotDiameter / 2, 2);
-        const mva = (lvotArea * lvotVti) / mvVti;
-
-        document.getElementById("mva_result").textContent = "Mitral Valve Area (Continuity): " + mva.toFixed(2) + " cm²";
-    }
-
-    function calculatePISATK() {
-            // ... (PISA calculation code - same as before) ...
-            const radialDistance = parseFloat(document.getElementById("radial_distance").value);
-            const aliasingVelocity = parseFloat(document.getElementById("aliasing_velocity").value);
-            const peakVelocity = parseFloat(document.getElementById("peak_velocity").value);
-            const vti = parseFloat(document.getElementById("vti").value);
-
-            if (isNaN(radialDistance) || isNaN(aliasingVelocity) || isNaN(peakVelocity) || isNaN(vti) ||
-                radialDistance < 0 || aliasingVelocity < 0 || peakVelocity < 0 || vti < 0) {
-                document.getElementById("pisa_result").textContent = "Please enter valid non-negative numbers.";
-                return;
-            }
-
- 
-</script>
-
-<style>
-  .additional-inputs {
-    display: none; /* Приховано за замовчуванням */
   }
 </style>
 </head>
 <body>
 
-  <h2>ТК</h2>
-  <input type="text" id="tk_reg" name="tk_reg"><br>
+  <h1>Plaque Characteristics</h1>
 
-  <table>
-    <tr>
-      <td colspan="2">
-        Регургітація:
-        <select name="t_reg" id="t_reg" onchange="toggleRegurgitationInputs()">
-          <option value="t_reg_0">--</option>
-          <option value="t_reg_1">мінімальна регургітація</option>
-          <option value="t_reg_2">легка регургітація</option>
-          <option value="t_reg_3">помірна регургітація</option>
-          <option value="t_reg_4">важка регургітація</option>
-        </select>
-      </td>
-      <td colspan="2">
-        Стеноз:
-        <select name="t_stenosis" id="t_stenosis" onchange="toggleStenosisInputs()">
-          <option value="t_stenosis_0">--</option>
-          <option value="t_stenosis_yes">так</option>
-        </select>
-      </td>
-      <td colspan="2">
-        Стулки:
-        <select name="tk">
-          <option value="tk_0">--</option>
-          <option value="tk_1">пролапсс</option>
-          <option value="tk_2">фіброз</option>
-          <option value="tk_3">кальциноз</option>
-        </select>
-      </td>
-    </tr>
-  </table>
+  <button onclick="addPlaque()">Add Plaque</button>
+  <button onclick="togglePlaqueVisibility()">Show/Hide Plaques</button>
+  <button onclick="savePlaqueData()">Save Data</button>
 
-  <div id="regurgitationInputs" class="additional-inputs">
-    <label for="max_gradient_velocity">Max градієнт та швидкість:</label>
-    <input type="number" id="max_gradient_velocity"><br>
+  <div id="plaqueList"></div>
 
-    <div id="tk_pisaCalculator" class="additional-inputs">
-      <h3>PISA Трикуспідальна регургітація</h3>
-      <label for="vc">VC(mm):</label>
-      <input type="number" class="highlighted" id="vc" name="vc"><br>
-
-      <label for="tk_radial_distance">Радіальна відстань від отвору (r):</label>
-      <input type="number" id="tk_radial_distance" step="0.1"><br>
-
-      <label for="tk_aliasing_velocity">Швидкість aliasing на радіальній відстані (Vr):</label>
-      <input type="number" id="tk_aliasing_velocity" step="0.1"><br>
-
-      <label for="tk_peak_velocity">Пікова швидкість трикуспідального регургітаційного струменя (Vmax):</label>
-      <input type="number" id="tk_peak_velocity" step="0.1"><br>
-
-      <label for="tk_vti">VTI трикуспідального регургітаційного струменя:</label>
-      <input type="number" id="tk_vti" step="0.1"><br>
-
-      <button onclick="calculatetkPISA()">Розрахувати</button>
-      <div id="tk_pisa_result"></div>
-    </div>
-  </div>
+  <textarea id="plaqueData" rows="5"></textarea>
 
   <script>
-    function toggleRegurgitationInputs() {
-      const tRegSelect = document.getElementById("t_reg");
-      const regurgitationInputsDiv = document.getElementById("regurgitationInputs");
-      const tk_pisaCalculator = document.getElementById("tk_pisaCalculator");
-      const selectedValue = tRegSelect.value;
+    let plaqueCount = 0;
+    let showPlaques = false; // Flag to track visibility of plaque divs
 
-      regurgitationInputsDiv.style.display = (selectedValue !== "t_reg_0") ? "block" : "none";
-      tk_pisaCalculator.style.display = (selectedValue === "t_reg_3" || selectedValue === "t_reg_4") ? "block" : "none";
+    function addPlaque() {
+      plaqueCount++;
+      const plaqueContainer = document.createElement("div");
+      plaqueContainer.classList.add("plaque-container");
+      plaqueContainer.id = `plaque-${plaqueCount}`;
+
+      plaqueContainer.innerHTML = `
+        <h2>Plaque ${plaqueCount}</h2>
+        <ul class="plaque-list">
+          <li>
+            Location:
+            <select id="location-${plaqueCount}">
+              <option value="proximal">Proximal</option>
+              <option value="distal">Distal</option>
+              <option value="bifurcation">At Bifurcation</option>
+              <option value="custom">Custom: <input type="text" id="custom-location-${plaqueCount}"></li>
+            </select>
+          </li>
+          <li>
+            Wall:
+            <label><input type="checkbox" id="anterior-${plaqueCount}"> Anterior</label>
+            <label><input type="checkbox" id="posterior-${plaqueCount}"> Posterior</label>
+            <label><input type="checkbox" id="medial-${plaqueCount}"> Medial</label>
+            <label><input type="checkbox" id="lateral-${plaqueCount}"> Lateral</label>
+          </li>
+          <li>Size: Width: <input type="number" id="width-${plaqueCount}">, Height: <input type="number" id="height-${plaqueCount}"></li>
+          <li>
+            Type:
+            <select id="type-${plaqueCount}">
+              <option value="concentric">Concentric</option>
+              <option value="eccentric">Eccentric</option>
+              <option value="irregular">Irregular</option>
+            </select>
+          </li>
+          <li>
+            Echogenicity:
+            <select id="echogenicity-${plaqueCount}">
+              <option value="hypoechoic">Hypoechoic</option>
+              <option value="hyperechoic">Hyperechoic</option>
+              <option value="heterogeneous">Heterogeneous</option>
+            </select>
+          </li>
+          <li>Stenosis: <input type="number" id="stenosis-${plaqueCount}"> %</li>
+          <li>
+            Structure:
+            <label><input type="checkbox" id="ulceration-${plaqueCount}"> Ulceration</label>
+            <label><input type="checkbox" id="calcification-${plaqueCount}"> Calcification</label>
+          </li>
+        </ul>
+        <textarea id="plaque-summary-${plaqueCount}" rows="3"></textarea>
+      `;
+
+      document.getElementById("plaqueList").appendChild(plaqueContainer);
+      showPlaques = true; // Make sure new plaques are visible by default
+      togglePlaqueVisibility(); // Update visibility based on current state
     }
 
-    function calculatetkPISA() {
-      const r = parseFloat(document.getElementById("tk_radial_distance").value);
-      const Vr = parseFloat(document.getElementById("tk_aliasing_velocity").value);
-      const Vmax = parseFloat(document.getElementById("tk_peak_velocity").value);
-      const VTI = parseFloat(document.getElementById("tk_vti").value);
+    function togglePlaqueVisibility() {
+      const plaqueContainers = document.querySelectorAll(".plaque-container");
+      plaqueContainers.forEach(container => {
+        if (showPlaques) {
+          container.classList.add("show");
+        } else {
+          container.classList.remove("show");
+        }
+      });
+      showPlaques = !showPlaques; // Toggle the visibility state
+    }
 
-      if (isNaN(r) || isNaN(Vr) || isNaN(Vmax) || isNaN(VTI) ||
-          r < 0 || Vr < 0 || Vmax <= 0 || VTI < 0) {
-        document.getElementById("tk_pisa_result").textContent = "Будь ласка, введіть дійсні невід'ємні числа.";
-        return;
-      }
+    function savePlaqueData() {
+      const plaqueDataTextarea = document.getElementById("plaqueData");
+      plaqueDataTextarea.value = ""; // Clear previous data
 
-      const VFR = 2 * Math.PI * r * r * Vr;
-      const ERO = VFR / Vmax;
-      const RVol = ERO * VTI;
-
-      document.getElementById("tk_pisa_result").innerHTML = `
-        Об'ємний потік (VFR): ${VFR.toFixed(2)} мл/с<br>
-        ПЕРО: ${ERO.toFixed(2)} мм²<br>
-        РО: ${RVol.toFixed(2)} мл/удар
-      `;
+      const plaqueContainers = document.querySelectorAll(".plaque-container");
+      plaqueContainers.forEach(container => {
+        const plaqueId = container.id;
+        const summaryTextarea = container.querySelector("textarea");
+        plaqueDataTextarea.value += `${plaqueId}\n${summaryTextarea.value}\n\n`;
+      });
     }
   </script>
 
-</body>
 </body>
 </html>
