@@ -1,129 +1,960 @@
-<!DOCTYPE html>
 <html>
+
 <head>
-<title>Plaque Characteristics</title>
-<style>
-  .plaque-container {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-    display: none; /* Initially hide the containers */
-  }
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <style type="text/css">
+        @import url(https://themes.googleusercontent.com/fonts/css?kit=fpjTOVmNbO4Lz34iLyptLaIg6ghpHn1vhFthO1ORc0-H4gUIUjZTH34PuvJkbTJT);
 
-  .plaque-container.show {
-    display: block; /* Show the container when the class 'show' is added */
-  }
-
-  .plaque-list {
-    list-style: none;
-    padding: 0;
-  }
-
-  /* Responsive design for smaller screens */
-  @media (max-width: 600px) {
-    .plaque-container {
-      width: 100%; /* Make containers full width on small screens */
-    }
-  }
-</style>
-</head>
-<body>
-
-  <h1>Plaque Characteristics</h1>
-
-  <button onclick="addPlaque()">Add Plaque</button>
-  <button onclick="togglePlaqueVisibility()">Show/Hide Plaques</button>
-  <button onclick="savePlaqueData()">Save Data</button>
-
-  <div id="plaqueList"></div>
-
-  <textarea id="plaqueData" rows="5"></textarea>
-
-  <script>
-    let plaqueCount = 0;
-    let showPlaques = false; // Flag to track visibility of plaque divs
-
-    function addPlaque() {
-      plaqueCount++;
-      const plaqueContainer = document.createElement("div");
-      plaqueContainer.classList.add("plaque-container");
-      plaqueContainer.id = `plaque-${plaqueCount}`;
-
-      plaqueContainer.innerHTML = `
-        <h2>Plaque ${plaqueCount}</h2>
-        <ul class="plaque-list">
-          <li>
-            Location:
-            <select id="location-${plaqueCount}">
-              <option value="proximal">Proximal</option>
-              <option value="distal">Distal</option>
-              <option value="bifurcation">At Bifurcation</option>
-              <option value="custom">Custom: <input type="text" id="custom-location-${plaqueCount}"></li>
-            </select>
-          </li>
-          <li>
-            Wall:
-            <label><input type="checkbox" id="anterior-${plaqueCount}"> Anterior</label>
-            <label><input type="checkbox" id="posterior-${plaqueCount}"> Posterior</label>
-            <label><input type="checkbox" id="medial-${plaqueCount}"> Medial</label>
-            <label><input type="checkbox" id="lateral-${plaqueCount}"> Lateral</label>
-          </li>
-          <li>Size: Width: <input type="number" id="width-${plaqueCount}">, Height: <input type="number" id="height-${plaqueCount}"></li>
-          <li>
-            Type:
-            <select id="type-${plaqueCount}">
-              <option value="concentric">Concentric</option>
-              <option value="eccentric">Eccentric</option>
-              <option value="irregular">Irregular</option>
-            </select>
-          </li>
-          <li>
-            Echogenicity:
-            <select id="echogenicity-${plaqueCount}">
-              <option value="hypoechoic">Hypoechoic</option>
-              <option value="hyperechoic">Hyperechoic</option>
-              <option value="heterogeneous">Heterogeneous</option>
-            </select>
-          </li>
-          <li>Stenosis: <input type="number" id="stenosis-${plaqueCount}"> %</li>
-          <li>
-            Structure:
-            <label><input type="checkbox" id="ulceration-${plaqueCount}"> Ulceration</label>
-            <label><input type="checkbox" id="calcification-${plaqueCount}"> Calcification</label>
-          </li>
-        </ul>
-        <textarea id="plaque-summary-${plaqueCount}" rows="3"></textarea>
-      `;
-
-      document.getElementById("plaqueList").appendChild(plaqueContainer);
-      showPlaques = true; // Make sure new plaques are visible by default
-      togglePlaqueVisibility(); // Update visibility based on current state
-    }
-
-    function togglePlaqueVisibility() {
-      const plaqueContainers = document.querySelectorAll(".plaque-container");
-      plaqueContainers.forEach(container => {
-        if (showPlaques) {
-          container.classList.add("show");
-        } else {
-          container.classList.remove("show");
+        .lst-kix_list_1-3>li:before {
+            content: "\0025cf   "
         }
-      });
-      showPlaques = !showPlaques; // Toggle the visibility state
-    }
 
-    function savePlaqueData() {
-      const plaqueDataTextarea = document.getElementById("plaqueData");
-      plaqueDataTextarea.value = ""; // Clear previous data
+        .lst-kix_list_1-4>li:before {
+            content: "o  "
+        }
 
-      const plaqueContainers = document.querySelectorAll(".plaque-container");
-      plaqueContainers.forEach(container => {
-        const plaqueId = container.id;
-        const summaryTextarea = container.querySelector("textarea");
-        plaqueDataTextarea.value += `${plaqueId}\n${summaryTextarea.value}\n\n`;
-      });
-    }
-  </script>
+        ul.lst-kix_list_1-0 {
+            list-style-type: none
+        }
 
+        .lst-kix_list_1-7>li:before {
+            content: "o  "
+        }
+
+        .lst-kix_list_1-5>li:before {
+            content: "\0025aa   "
+        }
+
+        .lst-kix_list_1-6>li:before {
+            content: "\0025cf   "
+        }
+
+        ul.lst-kix_list_1-3 {
+            list-style-type: none
+        }
+
+        .lst-kix_list_1-0>li:before {
+            content: "-  "
+        }
+
+        ul.lst-kix_list_1-4 {
+            list-style-type: none
+        }
+
+        .lst-kix_list_1-8>li:before {
+            content: "\0025aa   "
+        }
+
+        ul.lst-kix_list_1-1 {
+            list-style-type: none
+        }
+
+        ul.lst-kix_list_1-2 {
+            list-style-type: none
+        }
+
+        ul.lst-kix_list_1-7 {
+            list-style-type: none
+        }
+
+        .lst-kix_list_1-1>li:before {
+            content: "o  "
+        }
+
+        .lst-kix_list_1-2>li:before {
+            content: "\0025aa   "
+        }
+
+        ul.lst-kix_list_1-8 {
+            list-style-type: none
+        }
+
+        ul.lst-kix_list_1-5 {
+            list-style-type: none
+        }
+
+        ul.lst-kix_list_1-6 {
+            list-style-type: none
+        }
+
+        ol {
+            margin: 0;
+            padding: 0
+        }
+
+        table td,
+        table th {
+            padding: 0
+        }
+
+        .c30 {
+            border-right-style: solid;
+            padding: 0pt 5.4pt 0pt 5.4pt;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            width: 44.5pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .c16 {
+            border-right-style: solid;
+            padding: 0pt 5.4pt 0pt 5.4pt;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            width: 121pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .c28 {
+            border-right-style: solid;
+            padding: 0pt 5.4pt 0pt 5.4pt;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            width: 483.6pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .c8 {
+            border-right-style: solid;
+            padding: 0pt 5.4pt 0pt 5.4pt;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            width: 44.5pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .c15 {
+            border-right-style: solid;
+            padding: 0pt 5.4pt 0pt 5.4pt;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            width: 240.7pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .c10 {
+            border-right-style: solid;
+            padding: 0pt 5.4pt 0pt 5.4pt;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            width: 76.3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .c13 {
+            border-right-style: solid;
+            padding: 0pt 5.4pt 0pt 5.4pt;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            width: 240.8pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .c20 {
+            border-right-style: solid;
+            padding: 0pt 5.4pt 0pt 5.4pt;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            width: 407.3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .c31 {
+            border-right-style: solid;
+            padding: 0pt 5.4pt 0pt 5.4pt;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            width: 121pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .c11 {
+            border-right-style: solid;
+            padding: 0pt 5.4pt 0pt 5.4pt;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            width: 120.8pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .c7 {
+            border-right-style: solid;
+            padding: 0pt 5.4pt 0pt 5.4pt;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            width: 120.9pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .c1 {
+            border-right-style: solid;
+            padding: 0pt 5.4pt 0pt 5.4pt;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            width: 120.9pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .c17 {
+            padding-top: 0pt;
+            padding-bottom: 8pt;
+            line-height: 1.0791666666666666;
+            orphans: 2;
+            widows: 2;
+            text-align: left;
+            height: 11pt
+        }
+
+        .c6 {
+            color: #000000;
+            font-weight: 400;
+            text-decoration: none;
+            vertical-align: baseline;
+            font-size: 14pt;
+            font-family: "Calibri";
+            font-style: normal
+        }
+
+        .c4 {
+            padding-top: 0pt;
+            padding-bottom: 0pt;
+            line-height: 1.0;
+            orphans: 2;
+            widows: 2;
+            text-align: left;
+            height: 11pt
+        }
+
+        .c0 {
+            color: #000000;
+            font-weight: 400;
+            text-decoration: none;
+            vertical-align: baseline;
+            font-size: 11pt;
+            font-family: "Calibri";
+            font-style: normal
+        }
+
+        .c5 {
+            padding-top: 0pt;
+            padding-bottom: 0pt;
+            line-height: 1.0;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        .c21 {
+            padding-top: 0pt;
+            padding-bottom: 8pt;
+            line-height: 1.0791666666666666;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        .c18 {
+            color: #000000;
+            text-decoration: none;
+            vertical-align: baseline;
+            font-size: 11pt;
+            font-family: "Calibri";
+            font-style: normal
+        }
+
+        .c22 {
+            padding-top: 0pt;
+            padding-bottom: 8pt;
+            line-height: 1.0791666666666666;
+            orphans: 2;
+            widows: 2;
+            text-align: center
+        }
+
+        .c29 {
+            color: #000000;
+            text-decoration: none;
+            vertical-align: baseline;
+            font-size: 12pt;
+            font-family: "Open Sans";
+            font-style: normal
+        }
+
+        .c12 {
+            padding-top: 0pt;
+            padding-bottom: 0pt;
+            line-height: 1.15;
+            text-align: left;
+            height: 11pt
+        }
+
+        .c19 {
+            margin-left: -5.4pt;
+            border-spacing: 0;
+            border-collapse: collapse;
+            margin-right: auto
+        }
+
+        .c14 {
+            color: #000000;
+            font-weight: 400;
+            font-family: "Arial"
+        }
+
+        .c32 {
+            max-width: 451.3pt;
+            padding: 72pt 72pt 72pt 72pt
+        }
+
+        .c24 {
+            height: 5.5pt
+        }
+
+        .c23 {
+            height: 0pt
+        }
+
+        .c2 {
+            height: 5.2pt
+        }
+
+        .c33 {
+            height: 16.8pt
+        }
+
+        .c26 {
+            font-size: 14pt
+        }
+
+        .c27 {
+            background-color: #ffffff
+        }
+
+        .c3 {
+            background-color: #d0cece
+        }
+
+        .c9 {
+            font-weight: 700
+        }
+
+        .c25 {
+            height: 16.9pt
+        }
+
+        .title {
+            padding-top: 0pt;
+            color: #000000;
+            font-weight: 700;
+            font-size: 28pt;
+            padding-bottom: 0pt;
+            font-family: "Arial";
+            line-height: 1.0;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        .subtitle {
+            padding-top: 18pt;
+            color: #666666;
+            font-size: 24pt;
+            padding-bottom: 4pt;
+            font-family: "Georgia";
+            line-height: 1.0791666666666666;
+            page-break-after: avoid;
+            font-style: italic;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        li {
+            color: #000000;
+            font-size: 11pt;
+            font-family: "Calibri"
+        }
+
+        p {
+            margin: 0;
+            color: #000000;
+            font-size: 11pt;
+            font-family: "Calibri"
+        }
+
+        h1 {
+            padding-top: 24pt;
+            color: #000000;
+            font-weight: 700;
+            font-size: 24pt;
+            padding-bottom: 6pt;
+            font-family: "Calibri";
+            line-height: 1.0791666666666666;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        h2 {
+            padding-top: 18pt;
+            color: #000000;
+            font-weight: 700;
+            font-size: 18pt;
+            padding-bottom: 4pt;
+            font-family: "Calibri";
+            line-height: 1.0791666666666666;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        h3 {
+            padding-top: 14pt;
+            color: #000000;
+            font-weight: 700;
+            font-size: 14pt;
+            padding-bottom: 4pt;
+            font-family: "Calibri";
+            line-height: 1.0791666666666666;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        h4 {
+            padding-top: 12pt;
+            color: #000000;
+            font-weight: 700;
+            font-size: 12pt;
+            padding-bottom: 2pt;
+            font-family: "Calibri";
+            line-height: 1.0791666666666666;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        h5 {
+            padding-top: 11pt;
+            color: #000000;
+            font-weight: 700;
+            font-size: 11pt;
+            padding-bottom: 2pt;
+            font-family: "Calibri";
+            line-height: 1.0791666666666666;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        h6 {
+            padding-top: 10pt;
+            color: #000000;
+            font-weight: 700;
+            font-size: 10pt;
+            padding-bottom: 2pt;
+            font-family: "Calibri";
+            line-height: 1.0791666666666666;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+    </style>
+</head>
+
+<body class="c27 c32 doc-content">
+    <p class="c21"><span class="c6">КП &nbsp;&laquo;ХМЛДЦ&raquo; &nbsp; &nbsp;</span></p>
+    <p class="c4 c27"><span class="c29 c9"></span></p>
+    <p class="c4 c27"><span class="c9 c29"></span></p>
+    <p class="c22"><span class="c9 c26">УЗД СЕРЦЯ</span></p>
+    <p class="c21" id="h.51m8ud7ugqs5">
+        <span class="c6">
+            Зріст: <input type="number" id="heightInput" value="0" min="0" step="0.1"
+                style="width: 70px; text-align: center; border: 1px solid #ccc; padding: 2px;"> &nbsp;cm &nbsp; &nbsp;
+            &nbsp;
+            Вага: &nbsp;<input type="number" id="weightInput" value="0" min="0" step="0.1"
+                style="width: 70px; text-align: center; border: 1px solid #ccc; padding: 2px;"> kg &nbsp; &nbsp;
+            ППТ: <span id="bsaOutput">0.00</span> м2
+        </span>
+    </p>
+    <p class="c12"><span class="c6"></span></p>
+    <table class="c19">
+        <tr class="c2">
+            <td class="c11 c3" colspan="2" rowspan="1">
+                <p class="c5"><span class="c18 c9">Лівий шлуночок:</span></p>
+            </td>
+            <td class="c1 c3" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1 c3" colspan="1" rowspan="1">
+                <p class="c5"><span class="c18 c9">Аорта:</span></p>
+            </td>
+            <td class="c16 c3" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c2">
+            <td class="c11" colspan="2" rowspan="1">
+                <p class="c5"><span class="c0">КДР (мм)</span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">LVOT/ Кільце (мм)</span>
+                </p>
+            </td>
+            <td class="c16" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c2">
+            <td class="c11" colspan="2" rowspan="1">
+                <p class="c5"><span class="c0">КСР (мм)</span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">Синуси (мм)</span></p>
+            </td>
+            <td class="c16" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c2">
+            <td class="c11" colspan="2" rowspan="1">
+                <p class="c5"><span class="c0">КДО (мл)</span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">Висхідна
+                        (мм)</span></p>
+            </td>
+            <td class="c16" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c2">
+            <td class="c11" colspan="2" rowspan="1">
+                <p class="c5"><span class="c0">КСО (мл)</span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1 c3" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c16 c3" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c2">
+            <td class="c11" colspan="2" rowspan="1">
+                <p class="c5"><span class="c0">УО (мл)</span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1 c3" colspan="1" rowspan="1">
+                <p class="c5"><span class="c18 c9">ЛП:</span></p>
+            </td>
+            <td class="c16 c3" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c2">
+            <td class="c11 c3" colspan="2" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1 c3" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">Діаметр ЛП
+                        (мм)</span></p>
+            </td>
+            <td class="c16" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c2">
+            <td class="c11" colspan="2" rowspan="1">
+                <p class="c5"><span class="c0">МШП (мм)</span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">Об&rsquo;єм ЛП
+                        (мл)</span></p>
+            </td>
+            <td class="c16" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c2">
+            <td class="c11" colspan="2" rowspan="1">
+                <p class="c5"><span class="c0">ЗС ЛШ (мм)</span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">ІОЛП (мл/м2)</span></p>
+            </td>
+            <td class="c16" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c2">
+            <td class="c11" colspan="2" rowspan="1">
+                <p class="c5"><span class="c0">ВТС</span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1 c3" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c16 c3" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c2">
+            <td class="c11" colspan="2" rowspan="1">
+                <p class="c5"><span class="c0">ІММ ЛШ (г/м2)</span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1 c3" colspan="1" rowspan="1">
+                <p class="c5"><span class="c9">ПП:</span></p>
+            </td>
+            <td class="c16 c3" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c2">
+            <td class="c11" colspan="2" rowspan="1">
+                <p class="c5"><span
+                        class="c14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                </p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">Розміри (мм)</span>
+                </p>
+            </td>
+            <td class="c16" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c2">
+            <td class="c11" colspan="2" rowspan="1">
+                <p class="c5"><span class="c0">ФВ Тейхольц
+                        (%)</span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c5"><span class="c9">ПШ </span><span class="c0">&nbsp;:</span></p>
+            </td>
+            <td class="c16" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c2">
+            <td class="c11" colspan="2" rowspan="1">
+                <p class="c5"><span class="c0">ФВ Сімпсон
+                        (%)</span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">БР х СР (мм)</span></p>
+            </td>
+            <td class="c16" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c2">
+            <td class="c11 c3" colspan="2" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1 c3" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1 c3" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c16 c3" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c2">
+            <td class="c11" colspan="2" rowspan="1">
+                <p class="c5"><span class="c0">Е/А</span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">АССТ (мс)</span></p>
+            </td>
+            <td class="c16" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c2">
+            <td class="c11" colspan="2" rowspan="1">
+                <p class="c5"><span class="c0">Тип ТМК:</span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+            <td class="c1" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">Сис.тиск ЛА
+                        (мм рт.ст)</span></p>
+            </td>
+            <td class="c16" colspan="1" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c2">
+            <td class="c28" colspan="5" rowspan="1">
+                <p class="c4"><span class="c0"></span></p>
+            </td>
+        </tr>
+        <tr class="c24">
+            <td class="c10" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">МК </span></p>
+            </td>
+            <td class="c20" colspan="4" rowspan="1">
+                <p class="c5"><span class="c0">Не
+                        змінений</span></p>
+            </td>
+        </tr>
+        <tr class="c24">
+            <td class="c10" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">АК</span></p>
+            </td>
+            <td class="c20" colspan="4" rowspan="1">
+                <p class="c5"><span class="c0">серед.град &ndash;
+                        &nbsp;4 мм рт. ст.
+                        тристулковий</span></p>
+            </td>
+        </tr>
+        <tr class="c33">
+            <td class="c10" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">ТК </span></p>
+            </td>
+            <td class="c20" colspan="4" rowspan="1">
+                <p class="c5"><span class="c0">Легка
+                        регургітація. макс.град &ndash; &nbsp;00 мм
+                        рт. ст.</span></p>
+            </td>
+        </tr>
+        <tr class="c25">
+            <td class="c10" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">Клапан ЛА </span></p>
+            </td>
+            <td class="c20" colspan="4" rowspan="1">
+                <p class="c5"><span class="c0">не
+                        змінений</span></p>
+            </td>
+        </tr>
+    </table>
+    <p class="c17"><span class="c0"></span></p>
+    <table class="c19">
+        <tr class="c23">
+            <td class="c15" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">Локальна
+                        скоротлива здатність</span></p>
+            </td>
+            <td class="c13" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">Без
+                        особливостей</span></p>
+            </td>
+        </tr>
+        <tr class="c23">
+            <td class="c15" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">Перикард</span></p>
+            </td>
+            <td class="c13" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">Без
+                        особливостей</span></p>
+            </td>
+        </tr>
+        <tr class="c23">
+            <td class="c15" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">НПВ</span></p>
+            </td>
+            <td class="c13" colspan="1" rowspan="1">
+                <p class="c5"><span class="c0">00 см,
+                        спадається
+                        більше 00 %</span></p>
+            </td>
+        </tr>
+    </table>
+    <p class="c17"><span class="c0"></span></p>
+    <p class="c21"><span class="c0">Заключення:</span></p>
+    <p class="c17"><span class="c0"></span></p>
+    <p class="c21"><span class="c0">Лікар:
+            Дмитрук Анастасія &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Дата:
+            24.04.2025</span></p>
+    <p class="c17"><span class="c0"></span></p>
+
+    <script>
+        function calculateBSA() {
+            const heightCm = parseFloat(document.getElementById('heightInput').value);
+            const weightKg = parseFloat(document.getElementById('weightInput').value);
+            const bsaOutput = document.getElementById('bsaOutput');
+
+            if (isNaN(heightCm) || isNaN(weightKg) || heightCm <= 0 || weightKg <= 0) {
+                bsaOutput.textContent = '0.00'; // Display default or error
+                return;
+            }
+
+            // Du Bois formula: BSA (m²) = 0.007184 × Height (cm)^0.725 × Weight (kg)^0.425
+            const bsa = 0.007184 * Math.pow(heightCm, 0.725) * Math.pow(weightKg, 0.425);
+            bsaOutput.textContent = bsa.toFixed(2); // Display with 2 decimal places
+        }
+
+        // Add event listeners to update BSA when input changes
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const heightInput = document.getElementById('heightInput');
+            const weightInput = document.getElementById('weightInput');
+
+            heightInput.addEventListener('input', calculateBSA);
+            weightInput.addEventListener('input', calculateBSA);
+
+            // Calculate BSA initially in case default values are set
+            calculateBSA();
+        });
+    </script>
 </body>
+
 </html>
